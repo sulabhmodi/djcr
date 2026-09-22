@@ -1,0 +1,149 @@
+{
+  "brand_identity": {
+    "organization_name": "Digambar Jain Center of Raleigh (DJCR)",
+    "tagline": "An Upcoming Digambar Jain Temple Serving Raleigh and the Research Triangle",
+    "mantra_sacred": "णमो अरिहंताणं",
+    "regions_served": ["Raleigh", "Cary", "Morrisville", "Durham", "Chapel Hill", "Research Triangle Park (RTP)"],
+    "brand_personality": "Sophisticated, spiritual, serene, traditional, elegant, welcoming, timeless, sacred, community-focused",
+    "art_direction": "Award-worthy Awwwards Site-of-the-Day editorial sacred minimalism. Kinetic hero with line-by-line reveal, numbered manifesto chapters, slow editorial marquee, custom 3D lotus/shikhar ambient moment, authentic Digambar Jain symbols (Ahimsa wheel, Shikhar spires, Jali latticework, Lotus motifs), high-contrast warm ivory and deep maroon palettes, and smooth lenis momentum scrolling.",
+    "strict_rule": "Must remain strictly authentic to Digambar Jain identity — NO generic Hindu/Buddhist/Sikh imagery, deities, or symbols."
+  },
+  "color_palette": {
+    "archetype": "SACRED TRADITIONAL & EDITORIAL LUXURY",
+    "colors": {
+      "primary_background": "#FFF9ED",
+      "primary_background_rgb": "255, 249, 237",
+      "deep_maroon": "#6F1D1B",
+      "saffron": "#E87524",
+      "muted_gold": "#C99A30",
+      "warm_ivory_card": "#FFFDF7",
+      "charcoal_text": "#292929",
+      "soft_sand_accent": "#F4EBD9",
+      "gold_leaf_gradient": "linear-gradient(135deg, #C99A30 0%, #E87524 50%, #6F1D1B 100%)",
+      "maroon_surface": "#521413",
+      "border_subtle": "rgba(111, 29, 27, 0.12)",
+      "border_gold": "rgba(201, 154, 48, 0.3)"
+    },
+    "usage_guidelines": {
+      "backgrounds": "Use Warm Ivory (#FFF9ED) as main page canvas. Light Warm Ivory (#FFFDF7) for cards with subtle 1px border. Deep Maroon (#6F1D1B) reserved for high-impact contrast sections like Vision Pillars & Contact Hero.",
+      "text": "Charcoal (#292929) for body readability. Deep Maroon (#6F1D1B) for major headlines. Muted Gold (#C99A30) for labels, numbers, and sacred mantras.",
+      "ctas": "Primary CTA in Deep Maroon button with Muted Gold hover stroke, or Saffron (#E87524) accent. Secondary CTA in outlined Maroon with Warm Ivory background."
+    }
+  },
+  "typography": {
+    "file_type": "React JS (.js / .jsx)",
+    "font_families": {
+      "heading_display": "'Cormorant Garamond', 'Playfair Display', serif",
+      "mantra_devanagari": "'Rozha One', 'Tiro Devanagari Marathi', 'Noto Serif Devanagari', serif",
+      "body_text": "'Plus Jakarta Sans', 'Outfit', sans-serif",
+      "mono_accent": "'JetBrains Mono', monospace"
+    },
+    "google_fonts_embed_code": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+Devanagari:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Rozha+One&display=swap\" rel=\"stylesheet\">",
+    "text_sizes": {
+      "hero_heading": "text-4xl sm:text-5xl lg:text-6xl font-serif tracking-tight text-[#6F1D1B]",
+      "section_heading": "text-3xl sm:text-4xl lg:text-5xl font-serif text-[#6F1D1B]",
+      "mantra_large": "text-2xl sm:text-3xl md:text-4xl font-serif text-[#C99A30] tracking-wider",
+      "chapter_number": "text-xs uppercase tracking-[0.3em] font-mono text-[#C99A30]",
+      "body_lead": "text-lg md:text-xl text-[#292929]/80 font-sans leading-relaxed",
+      "body_regular": "text-base text-[#292929]/90 font-sans leading-relaxed"
+    }
+  },
+  "layout_and_grid": {
+    "type": "Single-Page Scroll Landing Page with Sticky Sacred Glass Header",
+    "container_padding": "px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto",
+    "section_spacing": "py-20 md:py-32",
+    "bento_grid_mode": "MODE A: Editorial Asymmetrical Layout",
+    "nav_sections": [
+      {"id": "hero", "label": "Temple"},
+      {"id": "about", "label": "About Us"},
+      {"id": "vision", "label": "Temple Vision"},
+      {"id": "dharma", "label": "Jain Dharma"},
+      {"id": "project", "label": "Temple Project"},
+      {"id": "events", "label": "Events"},
+      {"id": "get-involved", "label": "Get Involved"},
+      {"id": "contact", "label": "Contact"}
+    ]
+  },
+  "signature_design_features": {
+    "kinetic_hero_reveal": {
+      "concept": "A line-by-line masked reveal of 'Digambar Jain Center of Raleigh' with initial shimmer lotus glow.",
+      "devanagari_mantra": "णमो अरिहंताणं (Namokar Mantra opening) rendered in ornate gold foil typography.",
+      "hero_buttons": [
+        {"text": "Our Temple Vision", "href": "#vision", "variant": "primary"},
+        {"text": "Join Our Community", "href": "#get-involved", "variant": "secondary"}
+      ]
+    },
+    "editorial_marquee": {
+      "text_stream": "• AHIMSA (NON-VIOLENCE) • ANEKANTAVADA (MANY-SIDED REALITY) • APARIGRAHA (NON-POSSESSION) • JIN MANDIR • SWADHYAY • PATHSHALA • COMMUNITY • RALEIGH & RESEARCH TRIANGLE PARK •",
+      "speed": "35s slow drift",
+      "style": "Low contrast Muted Gold on Deep Maroon background ribbon with serif italic accents"
+    },
+    "numbered_manifesto_chapters": [
+      {"chapter": "01", "title": "WELCOME", "subtitle": "Jai Jinendra — Welcome to DJCR"},
+      {"chapter": "02", "title": "SACRED PILLARS", "subtitle": "Our Four Temple Vision Pillars"},
+      {"chapter": "03", "title": "JAIN DHARMA", "subtitle": "Core Eternal Principles"},
+      {"chapter": "04", "title": "OUR JOURNEY", "subtitle": "Temple Project Milestone Roadmap"},
+      {"chapter": "05", "title": "SANGH EVENTS", "subtitle": "Upcoming Sacred & Cultural Gatherings"},
+      {"chapter": "06", "title": "SEVA & COMMUNITY", "subtitle": "Be Part of Building Our Legacy"}
+    ],
+    "threejs_hero_moment": {
+      "type": "Interactive Ambient 3D Lotus / Sacred Geometry Canvas",
+      "fallback": "Subtle animated SVG Shikhar Spire & Lotus geometry with golden particle field",
+      "library": "Three.js / React Three Fiber / TSParticles"
+    }
+  },
+  "sections_breakdown": {
+    "01_header": "Glassmorphism header: backdrop-blur-md bg-[#FFF9ED]/80 border-b border-[#6F1D1B]/10. DJCR Shikhar Logo on left, nav items, 'Support Vision' CTA button. Mobile sheet drawer.",
+    "02_hero": "Hero section with 3D/Canvas background, line-by-line motion reveal of title, 'णमो अरिहंताणं', supporting devotional text, and dual CTAs.",
+    "03_welcome": "Jai Jinendra welcome section with authentic Digambar Jain greeting, introduction to the RTP sangh, and architectural photo with Arch cutout border.",
+    "04_temple_vision": "Four Pillars: 1. Jin Mandir (Sacred Temple), 2. Swadhyay (Self-Study & Scriptures), 3. Pathshala (Children & Youth Education), 4. Community (Sangh Unity & Harmony). Interactive expandable cards.",
+    "05_jain_dharma": "Three Tirthankar Principles: Ahimsa (Non-violence in thought, word, deed), Anekantavada (Multi-faceted truth & tolerance), Aparigraha (Non-attachment). Sacred Devanagari typography.",
+    "06_temple_project": "Milestone Roadmap ('Our Journey Has Begun'): Vision -> Planning -> Property Selection -> Architectural Design -> Fundraising -> Construction -> Pratishtha Mahotsav. Interactive timeline slider/nodes.",
+    "07_events": "Filterable/Tabbed events (All, Parv, Pathshala, Swadhyay): Dash Lakshan Parv, Mahavir Jayanti, Kshamavani, Weekly Swadhyay, Vidhan Puja, Kids Pathshala, Community Gatherings. Modal registration dialog with Sonner toast feedback.",
+    "08_get_involved": "Action Cards: 1. Join Community, 2. Volunteer Seva, 3. Support Temple Vision, 4. Receive Event Updates, 5. Join WhatsApp Sangh Group.",
+    "09_contact": "Connect with DJCR contact form (Name, Email, Phone, Subject, Message, Submit button) + Sangh contact details (Email, Phone, WhatsApp, Facebook, Instagram, YouTube links).",
+    "10_footer": "Deep Maroon dark surface with gold 'Jai Jinendra 🙏', quick nav links, newsletter signup, copyright notice, and subtle lotus footer watermark."
+  },
+  "image_urls": [
+    {
+      "category": "Architectural Detail & Pillars",
+      "url": "https://images.pexels.com/photos/35341456/pexels-photo-35341456.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Detailed Indian temple stone carvings on pillars"
+    },
+    {
+      "category": "Lotus Arch & Marble Craftsmanship",
+      "url": "https://images.pexels.com/photos/28831185/pexels-photo-28831185.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Intricate Lotus arch architecture in stone"
+    },
+    {
+      "category": "Stone Lotus Motif",
+      "url": "https://images.unsplash.com/photo-1706610904920-c84b5ba024cb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHxf|||&ixlib=rb-4.1.0&q=85",
+      "description": "Carved stone lotus finial detail"
+    },
+    {
+      "category": "Marble Temple Courtyard Light",
+      "url": "https://images.pexels.com/photos/31528741/pexels-photo-31528741.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Serene white marble facade under sunlight"
+    }
+  ],
+  "motion_and_interactivity": {
+    "libraries": ["framer-motion", "lenis", "lucide-react", "canvas-confetti"],
+    "smooth_scrolling": "Lenis smooth scroll initialized on mount",
+    "scroll_reveal": "framer-motion initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}",
+    "hover_effects": "Subtle y-axis translation (-4px), border gold glow, and button inner shimmer transition"
+  },
+  "testing_and_accessibility": {
+    "data_testid_requirement": "ALL interactive buttons, form elements, tab filters, dialog triggers, and links MUST include explicit data-testid attributes (e.g. data-testid=\"hero-vision-cta\", data-testid=\"contact-submit-btn\").",
+    "file_extension": "All source components are JavaScript React (.js / .jsx). Do NOT generate TypeScript (.tsx) files.",
+    "color_contrast": "Ensure all text on warm ivory or deep maroon meets APCA / WCAG AA accessibility standards."
+  },
+  "instructions_to_main_agent": [
+    "Build a single-page responsive React landing page in /app/frontend/src/App.js (or modular components under /app/frontend/src/components/).",
+    "Install and integrate lenis for smooth momentum scrolling and framer-motion for line-by-line kinetic hero reveals.",
+    "Include a dynamic 3D or ambient interactive canvas background in the hero (using Three.js / R3F or HTML5 Canvas golden particle lotus).",
+    "Strictly enforce the color palette: Warm Ivory #FFF9ED canvas, Deep Maroon #6F1D1B, Saffron #E87524, Muted Gold #C99A30, Charcoal #292929 text.",
+    "Ensure all events have interactive registration modals with Sonner toast feedback upon submission.",
+    "Ensure the contact form handles client-side state and shows a polished success confirmation toast.",
+    "Include 'data-testid' on every button, nav item, card, filter, input, and link."
+  ]
+}

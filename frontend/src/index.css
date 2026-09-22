@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 46 100% 96.5%;
+        --foreground: 0 0% 16%;
+        --card: 48 100% 98.5%;
+        --card-foreground: 0 0% 16%;
+        --popover: 48 100% 98.5%;
+        --popover-foreground: 0 0% 16%;
+        --primary: 2 61% 27%;
+        --primary-foreground: 46 100% 96.5%;
+        --secondary: 40 44% 90%;
+        --secondary-foreground: 2 61% 27%;
+        --muted: 40 44% 92%;
+        --muted-foreground: 0 0% 40%;
+        --accent: 41 62% 48%;
+        --accent-foreground: 2 61% 27%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 2 40% 86%;
+        --input: 2 40% 86%;
+        --ring: 41 62% 48%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+
+        --ivory: #fff9ed;
+        --ivory-card: #fffdf7;
+        --maroon: #6f1d1b;
+        --maroon-deep: #521413;
+        --saffron: #e87524;
+        --gold: #c99a30;
+        --charcoal: #292929;
+        --sand: #f4ebd9;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: auto;
+    }
+    body {
+        @apply bg-background text-foreground;
+        margin: 0;
+        font-family: "Plus Jakarta Sans", "Outfit", ui-sans-serif, system-ui,
+            sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    ::selection {
+        background: rgba(201, 154, 48, 0.35);
+        color: #521413;
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #fff9ed;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(111, 29, 27, 0.35);
+        border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(111, 29, 27, 0.55);
+    }
+}
+
+.font-display {
+    font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+}
+.font-devanagari {
+    font-family: "Rozha One", "Noto Serif Devanagari", Georgia, serif;
+}
+.font-mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace !important;
+}
+
+.jali-bg {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%236F1D1B' stroke-opacity='0.07'%3E%3Ccircle cx='28' cy='28' r='12'/%3E%3Ccircle cx='0' cy='0' r='12'/%3E%3Ccircle cx='56' cy='0' r='12'/%3E%3Ccircle cx='0' cy='56' r='12'/%3E%3Ccircle cx='56' cy='56' r='12'/%3E%3C/g%3E%3C/svg%3E");
+}
+.jali-bg-light {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23C99A30' stroke-opacity='0.12'%3E%3Ccircle cx='28' cy='28' r='12'/%3E%3Ccircle cx='0' cy='0' r='12'/%3E%3Ccircle cx='56' cy='0' r='12'/%3E%3Ccircle cx='0' cy='56' r='12'/%3E%3Ccircle cx='56' cy='56' r='12'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes djcr-marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+.animate-marquee {
+    animation: djcr-marquee 42s linear infinite;
+}
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}
