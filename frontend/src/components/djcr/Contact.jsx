@@ -1,18 +1,17 @@
 import { useState } from "react";
-import axios from "axios";
 import { Mail, Phone, MessageCircle, Facebook, Instagram, Youtube } from "lucide-react";
 import { toast } from "sonner";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const ADMIN_EMAIL = "admin@djcraleigh.org";
 
 const CHANNELS = [
     {
         icon: Mail,
         label: "Email",
-        value: "admin@djcraleigh.org",
-        href: "mailto:admin@djcraleigh.org",
+        value: ADMIN_EMAIL,
+        href: `mailto:${ADMIN_EMAIL}`,
         id: "email",
     },
     { icon: Phone, label: "Phone", value: "To be announced", id: "phone" },
@@ -26,22 +25,24 @@ const EMPTY = { name: "", email: "", phone: "", subject: "", message: "" };
 
 export default function Contact() {
     const [form, setForm] = useState(EMPTY);
-    const [submitting, setSubmitting] = useState(false);
 
-    const submit = async (e) => {
+    const submit = (e) => {
         e.preventDefault();
-        setSubmitting(true);
-        try {
-            await axios.post(`${API}/contact`, form);
-            toast.success("Jai Jinendra! Your message has been received.", {
-                description: "The DJCR team will respond as soon as possible.",
-            });
-            setForm(EMPTY);
-        } catch {
-            toast.error("Something went wrong. Please try again.");
-        } finally {
-            setSubmitting(false);
-        }
+        const subject = `Website Contact — ${form.subject}`;
+        const body = [
+            `Name: ${form.name}`,
+            `Email: ${form.email}`,
+            `Phone: ${form.phone || "—"}`,
+            "",
+            form.message,
+        ].join("\n");
+        window.location.href = `mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(
+            subject
+        )}&body=${encodeURIComponent(body)}`;
+        toast.success("Opening your email app…", {
+            description: `Your message is ready to send to ${ADMIN_EMAIL}.`,
+        });
+        setForm(EMPTY);
     };
 
     const field =
@@ -51,7 +52,7 @@ export default function Contact() {
         <section id="contact" data-testid="contact-section" className="py-20 md:py-32 jali-bg">
             <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto">
                 <SectionHeading
-                    chapter="07"
+                    chapter="08"
                     eyebrow="Contact"
                     title="Connect With DJCR"
                     subtitle="Serving the Digambar Jain community of Raleigh, Cary, Morrisville, Durham, Chapel Hill, and the greater Research Triangle of North Carolina."
@@ -153,14 +154,24 @@ export default function Contact() {
                                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                                 className={`${field} mt-5`}
                             />
-                            <button
-                                data-testid="contact-submit"
-                                type="submit"
-                                disabled={submitting}
-                                className="btn-shimmer mt-7 rounded-full bg-[#6F1D1B] text-[#FFF9ED] px-10 py-3.5 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300 disabled:opacity-60 w-full sm:w-auto"
-                            >
-                                {submitting ? "Sending…" : "Send Message"}
-                            </button>
+                            <div className="mt-7 flex flex-col sm:flex-row sm:items-center gap-4">
+                                <button
+                                    data-testid="contact-submit"
+                                    type="submit"
+                                    className="btn-shimmer rounded-full bg-[#6F1D1B] text-[#FFF9ED] px-10 py-3.5 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300 w-full sm:w-auto"
+                                >
+                                    Send Message
+                                </button>
+                                <p className="text-xs text-[#292929]/55 leading-relaxed">
+                                    Opens your email app, addressed to{" "}
+                                    <a
+                                        href={`mailto:${ADMIN_EMAIL}`}
+                                        className="text-[#6F1D1B] underline underline-offset-2 hover:text-[#C99A30]"
+                                    >
+                                        {ADMIN_EMAIL}
+                                    </a>
+                                </p>
+                            </div>
                         </form>
                     </Reveal>
                 </div>

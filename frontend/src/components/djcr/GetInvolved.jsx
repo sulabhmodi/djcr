@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { Users, HeartHandshake, Landmark, BellRing, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import Reveal from "./Reveal";
@@ -11,8 +10,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const ACTIONS = [
     {
@@ -57,27 +54,29 @@ const EMPTY = { name: "", email: "", phone: "", message: "" };
 export default function GetInvolved() {
     const [selected, setSelected] = useState(null);
     const [form, setForm] = useState(EMPTY);
-    const [submitting, setSubmitting] = useState(false);
 
-    const submit = async (e) => {
+    const submit = (e) => {
         e.preventDefault();
         if (!selected) return;
-        setSubmitting(true);
-        try {
-            await axios.post(`${API}/interest`, { kind: selected.kind, ...form });
-            toast.success("Jai Jinendra! Thank you for stepping forward.", {
-                description:
-                    selected.kind === "whatsapp"
-                        ? "The WhatsApp invite will be shared with you by email once the group link is published."
-                        : "The DJCR team will reach out to you soon.",
-            });
-            setSelected(null);
-            setForm(EMPTY);
-        } catch {
-            toast.error("Something went wrong. Please try again.");
-        } finally {
-            setSubmitting(false);
-        }
+        const subject = `${selected.title} — DJCR Website`;
+        const body = [
+            `I would like to: ${selected.title}`,
+            "",
+            `Name: ${form.name}`,
+            `Email: ${form.email}`,
+            `Phone: ${form.phone || "—"}`,
+            "",
+            form.message ? `Message: ${form.message}` : "",
+        ].join("\n");
+        window.location.href = `mailto:admin@djcraleigh.org?subject=${encodeURIComponent(
+            subject
+        )}&body=${encodeURIComponent(body)}`;
+        toast.success("Opening your email app…", {
+            description:
+                "Your details are ready to send to admin@djcraleigh.org. The DJCR team will connect with you.",
+        });
+        setSelected(null);
+        setForm(EMPTY);
     };
 
     return (
@@ -130,7 +129,8 @@ export default function GetInvolved() {
                             {selected?.title}
                         </DialogTitle>
                         <DialogDescription className="text-[#292929]/60">
-                            Share your details and the DJCR team will connect with you.
+                            Share your details — they will be emailed to admin@djcraleigh.org and
+                            the DJCR team will connect with you.
                         </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={submit} className="space-y-4 mt-2">
@@ -169,10 +169,9 @@ export default function GetInvolved() {
                         <button
                             data-testid="interest-submit"
                             type="submit"
-                            disabled={submitting}
-                            className="btn-shimmer w-full rounded-full bg-[#6F1D1B] text-[#FFF9ED] py-3 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300 disabled:opacity-60"
+                            className="btn-shimmer w-full rounded-full bg-[#6F1D1B] text-[#FFF9ED] py-3 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300"
                         >
-                            {submitting ? "Submitting…" : "Submit"}
+                            Send via Email
                         </button>
                     </form>
                 </DialogContent>

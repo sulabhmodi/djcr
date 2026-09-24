@@ -10,6 +10,7 @@ const NAV = [
     { href: "#events", label: "Events", id: "events" },
     { href: "#dharma", label: "Jain Dharma", id: "dharma" },
     { href: "#get-involved", label: "Get Involved", id: "get-involved" },
+    { href: "#donate", label: "Donate", id: "donate" },
     { href: "#contact", label: "Contact", id: "contact" },
 ];
 
@@ -35,13 +36,17 @@ export default function Header() {
         >
             <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex items-center justify-between h-[72px]">
                 <Logo />
-                <nav className="hidden lg:flex items-center gap-7" aria-label="Main navigation">
+                <nav className="hidden xl:flex items-center gap-5" aria-label="Main navigation">
                     {NAV.map((item) => (
                         <a
                             key={item.id}
                             href={item.href}
                             data-testid={`nav-link-${item.id}`}
-                            className="text-[13px] uppercase tracking-[0.14em] text-[#292929]/70 hover:text-[#6F1D1B] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full"
+                            className={`text-[13px] uppercase tracking-[0.14em] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full ${
+                                item.id === "donate"
+                                    ? "text-[#C99A30] font-semibold hover:text-[#E87524]"
+                                    : "text-[#292929]/70 hover:text-[#6F1D1B]"
+                            }`}
                         >
                             {item.label}
                         </a>
@@ -56,11 +61,10 @@ export default function Header() {
                 </nav>
                 <button
                     data-testid="mobile-menu-button"
-                    className="lg:hidden text-[#6F1D1B] p-2"
+                    className="xl:hidden text-[#6F1D1B] p-2"
                     onClick={() => setOpen((v) => !v)}
                     aria-label={open ? "Close menu" : "Open menu"}
                 >
-                    {open ? <Menu className="hidden" /> : null}
                     {open ? <X size={26} /> : <Menu size={26} />}
                 </button>
             </div>
@@ -72,7 +76,7 @@ export default function Header() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        className="lg:hidden overflow-hidden bg-[#FFF9ED]/95 backdrop-blur-md border-t border-[#6F1D1B]/10"
+                        className="xl:hidden overflow-hidden bg-[#FFF9ED]/95 backdrop-blur-md border-t border-[#6F1D1B]/10"
                         aria-label="Mobile navigation"
                     >
                         <div className="px-6 py-6 flex flex-col gap-5">
@@ -82,7 +86,9 @@ export default function Header() {
                                     href={item.href}
                                     data-testid={`mobile-nav-link-${item.id}`}
                                     onClick={() => setOpen(false)}
-                                    className="font-display text-2xl text-[#6F1D1B]"
+                                    className={`font-display text-2xl ${
+                                        item.id === "donate" ? "text-[#C99A30]" : "text-[#6F1D1B]"
+                                    }`}
                                 >
                                     {item.label}
                                 </a>

@@ -8,6 +8,7 @@ const LINKS = [
     { href: "#events", label: "Events", id: "events" },
     { href: "#dharma", label: "Jain Dharma", id: "dharma" },
     { href: "#get-involved", label: "Get Involved", id: "get-involved" },
+    { href: "#donate", label: "Donate", id: "donate" },
     { href: "#contact", label: "Contact", id: "contact" },
 ];
 

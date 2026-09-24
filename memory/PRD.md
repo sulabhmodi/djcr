@@ -39,6 +39,14 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - Temple project roadmap extended: Vision = Completed (gold check); Planning = In Progress ("All legal activities in progress"); Property = In Progress ("Property search in progress")
 - Managed Resend email notifications wired: contact/event/interest submissions email admin@djcraleigh.org (ADMIN_EMAIL in backend/.env; EMAIL_FROM_NAME="Digambar Jain Center of Raleigh"). Pipeline verified with delivered@resend.dev (202 + id). NOTE: proxy currently blocks admin@djcraleigh.org as undeliverable (mailbox/domain not live yet) — needs a real working inbox or the djcraleigh.org mailbox to be created; submissions are always saved to MongoDB regardless.
 
+## Updates (2026-09-24, round 2)
+- Single contact email everywhere: admin@djcraleigh.org (verified by grep — no placeholders remain)
+- All forms converted from backend POSTs to mailto: actions addressed to admin@djcraleigh.org (contact, event registration, get-involved) so the site is fully static-hosting compatible; toast confirms "Opening your email app…"
+- New Donate section (chapter 07, maroon) + prominent gold DONATE nav tab (desktop xl+ and mobile) + footer link; CTA "Contact Us to Donate" → mailto with subject "Donation Inquiry - Digambar Jain Center of Raleigh"; contact renumbered to chapter 08; no financial details invented
+- Events now load from API with local fallback in frontend/src/components/djcr/eventsData.js (works on static hosting)
+- README.md fully rewritten for a non-technical admin: overview, prerequisites, real repo structure, local dev (yarn start), editing guide with file paths, images guide, yarn build → frontend/build/, GitHub workflow, Cloudflare Pages + Squarespace DNS deployment for djcraleigh.org, forms/email explanation
+- NOTE: Emergent preview still runs the FastAPI backend (endpoints intact); the static site does not depend on it
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions

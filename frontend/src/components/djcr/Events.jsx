@@ -4,6 +4,7 @@ import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import { toast } from "sonner";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
+import { EVENTS as LOCAL_EVENTS } from "./eventsData";
 import {
     Dialog,
     DialogContent,
@@ -21,37 +22,41 @@ export default function Events() {
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState(null);
     const [form, setForm] = useState(EMPTY);
-    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         axios
-            .get(`${API}/events`)
-            .then((res) => setEvents(res.data.events || []))
-            .catch(() => setEvents([]))
+            .get(`${API}/events`, { timeout: 4000 })
+            .then((res) =>
+                setEvents(res.data.events?.length ? res.data.events : LOCAL_EVENTS)
+            )
+            .catch(() => setEvents(LOCAL_EVENTS))
             .finally(() => setLoading(false));
     }, []);
 
-    const submit = async (e) => {
+    const submit = (e) => {
         e.preventDefault();
         if (!selected) return;
-        setSubmitting(true);
-        try {
-            await axios.post(`${API}/events/register`, {
-                event_id: selected.id,
-                event_title: selected.title,
-                ...form,
-                guests: Number(form.guests) || 1,
-            });
-            toast.success("Jai Jinendra! Your registration has been received.", {
-                description: `${selected.title} — details will be shared with the Sangh.`,
-            });
-            setSelected(null);
-            setForm(EMPTY);
-        } catch {
-            toast.error("Something went wrong. Please try again.");
-        } finally {
-            setSubmitting(false);
-        }
+        const subject = `Event Registration — ${selected.title}`;
+        const body = [
+            `Event: ${selected.title}`,
+            `Date: ${selected.date}`,
+            `Time: ${selected.time}`,
+            `Location: ${selected.location}`,
+            "",
+            `Name: ${form.name}`,
+            `Email: ${form.email}`,
+            `Phone: ${form.phone || "—"}`,
+            `Guests: ${form.guests || 1}`,
+        ].join("\n");
+        window.location.href = `mailto:admin@djcraleigh.org?subject=${encodeURIComponent(
+            subject
+        )}&body=${encodeURIComponent(body)}`;
+        toast.success("Opening your email app…", {
+            description:
+                "Your registration details are ready to send to admin@djcraleigh.org.",
+        });
+        setSelected(null);
+        setForm(EMPTY);
     };
 
     return (
@@ -116,12 +121,6 @@ export default function Events() {
                                 </article>
                             </Reveal>
                         ))}
-                    {!loading && events.length === 0 && (
-                        <p className="col-span-full text-center text-[#292929]/60">
-                            Events will be announced soon. Please check back or join our community
-                            for updates.
-                        </p>
-                    )}
                 </div>
             </div>
 
@@ -135,7 +134,8 @@ export default function Events() {
                             {selected?.title}
                         </DialogTitle>
                         <DialogDescription className="text-[#292929]/60">
-                            {selected?.date} · {selected?.time}
+                            {selected?.date} · {selected?.time} — your registration will be emailed
+                            to admin@djcraleigh.org
                         </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={submit} className="space-y-4 mt-2">
@@ -179,10 +179,9 @@ export default function Events() {
                         <button
                             data-testid="event-reg-submit"
                             type="submit"
-                            disabled={submitting}
-                            className="btn-shimmer w-full rounded-full bg-[#6F1D1B] text-[#FFF9ED] py-3 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300 disabled:opacity-60"
+                            className="btn-shimmer w-full rounded-full bg-[#6F1D1B] text-[#FFF9ED] py-3 text-sm uppercase tracking-[0.16em] hover:bg-[#521413] transition-colors duration-300"
                         >
-                            {submitting ? "Submitting…" : "Register"}
+                            Register via Email
                         </button>
                     </form>
                 </DialogContent>

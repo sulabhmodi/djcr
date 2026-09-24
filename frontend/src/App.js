@@ -10,6 +10,7 @@ import Dharma from "@/components/djcr/Dharma";
 import Project from "@/components/djcr/Project";
 import Events from "@/components/djcr/Events";
 import GetInvolved from "@/components/djcr/GetInvolved";
+import Donate from "@/components/djcr/Donate";
 import Contact from "@/components/djcr/Contact";
 import Footer from "@/components/djcr/Footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -53,6 +54,7 @@ function App() {
                 <Project />
                 <Events />
                 <GetInvolved />
+                <Donate />
                 <Contact />
             </main>
             <Footer />
