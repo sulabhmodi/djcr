@@ -8,6 +8,7 @@ const NAV = [
     { href: "#about", label: "About Us", id: "about" },
     { href: "#vision", label: "Temple Vision", id: "vision" },
     { href: "#events", label: "Events", id: "events" },
+    { href: "#gallery", label: "Gallery", id: "gallery" },
     { href: "#dharma", label: "Jain Dharma", id: "dharma" },
     { href: "#get-involved", label: "Get Involved", id: "get-involved" },
     { href: "#donate", label: "Donate", id: "donate" },
@@ -42,7 +43,7 @@ export default function Header() {
                             key={item.id}
                             href={item.href}
                             data-testid={`nav-link-${item.id}`}
-                            className={`text-[13px] uppercase tracking-[0.14em] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full ${
+                            className={`text-[13px] uppercase tracking-[0.12em] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full ${
                                 item.id === "donate"
                                     ? "text-[#C99A30] font-semibold hover:text-[#E87524]"
                                     : "text-[#292929]/70 hover:text-[#6F1D1B]"
@@ -51,13 +52,6 @@ export default function Header() {
                             {item.label}
                         </a>
                     ))}
-                    <a
-                        href="#get-involved"
-                        data-testid="nav-support-vision-cta"
-                        className="btn-shimmer ml-2 rounded-full bg-[#6F1D1B] text-[#FFF9ED] text-[13px] uppercase tracking-[0.14em] px-5 py-2.5 hover:bg-[#521413] transition-colors duration-300"
-                    >
-                        Support Vision
-                    </a>
                 </nav>
                 <button
                     data-testid="mobile-menu-button"
@@ -93,14 +87,6 @@ export default function Header() {
                                     {item.label}
                                 </a>
                             ))}
-                            <a
-                                href="#get-involved"
-                                data-testid="mobile-support-vision-cta"
-                                onClick={() => setOpen(false)}
-                                className="mt-2 rounded-full bg-[#6F1D1B] text-[#FFF9ED] text-center text-sm uppercase tracking-[0.14em] px-5 py-3"
-                            >
-                                Support Vision
-                            </a>
                         </div>
                     </motion.nav>
                 )}

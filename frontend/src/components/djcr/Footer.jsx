@@ -6,6 +6,7 @@ const LINKS = [
     { href: "#about", label: "About Us", id: "about" },
     { href: "#vision", label: "Temple Vision", id: "vision" },
     { href: "#events", label: "Events", id: "events" },
+    { href: "#gallery", label: "Gallery", id: "gallery" },
     { href: "#dharma", label: "Jain Dharma", id: "dharma" },
     { href: "#get-involved", label: "Get Involved", id: "get-involved" },
     { href: "#donate", label: "Donate", id: "donate" },

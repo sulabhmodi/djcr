@@ -81,6 +81,7 @@ Optional (only needed if you ever work on the Python backend): Python 3.10+ and 
 │           │   ├── Project.jsx       ← "Our Journey Has Begun" + milestone timeline
 │           │   ├── Events.jsx        ← Upcoming Events cards
 │           │   ├── eventsData.js     ← ★ THE EVENTS LIST — edit this to update events
+│           │   ├── Gallery.jsx       ← ★ Photo gallery + document downloads + uploads
 │           │   ├── GetInvolved.jsx   ← "Be Part of Our Journey"
 │           │   ├── Donate.jsx        ← ★ Donate section
 │           │   ├── Contact.jsx       ← contact form + contact details
@@ -154,6 +155,7 @@ save, and the local site updates instantly.
 | Jain Dharma principles | `frontend/src/components/djcr/Dharma.jsx` |
 | Temple project text & milestone timeline | `frontend/src/components/djcr/Project.jsx` (edit the `MILESTONES` list — set `status` to `"completed"`, `"in-progress"`, or `"upcoming"`) |
 | **Events** (most common update) | `frontend/src/components/djcr/eventsData.js` — each event is a block with `title`, `category`, `date`, `time`, `location`, `description`, and `tentative` (true = shows "Details to be confirmed") |
+| Photo gallery & PDF documents | Managed on the live Emergent-hosted site itself — visitors/admins upload via the **Gallery & Resources** section (no file editing needed). Files are stored in Emergent object storage; the backend keeps the index in MongoDB. Note: gallery uploads/downloads require the backend, so on a pure static host (Cloudflare Pages) this section shows a polite "coming soon" message instead |
 | Get Involved cards | `frontend/src/components/djcr/GetInvolved.jsx` (edit the `ACTIONS` list) |
 | **Contact email** | `frontend/src/components/djcr/Contact.jsx` (the `ADMIN_EMAIL` constant at the top) — it is currently `admin@djcraleigh.org` |
 | Footer text and links | `frontend/src/components/djcr/Footer.jsx` |

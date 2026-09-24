@@ -19,6 +19,7 @@ const EMPTY = { name: "", email: "", phone: "", guests: 1 };
 
 export default function Events() {
     const [events, setEvents] = useState([]);
+    const [eventPhotos, setEventPhotos] = useState({});
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState(null);
     const [form, setForm] = useState(EMPTY);
@@ -31,6 +32,16 @@ export default function Events() {
             )
             .catch(() => setEvents(LOCAL_EVENTS))
             .finally(() => setLoading(false));
+        axios
+            .get(`${API}/media`, { params: { category: "event" }, timeout: 4000 })
+            .then((res) => {
+                const map = {};
+                (res.data.files || []).forEach((f) => {
+                    if (f.event_id && !map[f.event_id]) map[f.event_id] = f;
+                });
+                setEventPhotos(map);
+            })
+            .catch(() => {});
     }, []);
 
     const submit = (e) => {
@@ -83,6 +94,15 @@ export default function Events() {
                                     data-testid={`event-card-${ev.id}`}
                                     className="group h-full flex flex-col rounded-2xl bg-[#FFFDF7] border border-[#6F1D1B]/10 p-7 hover:-translate-y-1.5 hover:border-[#C99A30]/50 hover:shadow-[0_30px_50px_-25px_rgba(111,29,27,0.25)] transition-all duration-500"
                                 >
+                                    {eventPhotos[ev.id] && (
+                                        <img
+                                            data-testid={`event-photo-${ev.id}`}
+                                            src={`${API}/media/file/${eventPhotos[ev.id].id}`}
+                                            alt={eventPhotos[ev.id].title || `${ev.title} photo`}
+                                            loading="lazy"
+                                            className="mb-5 -mt-2 h-40 w-full object-cover rounded-xl border border-[#C99A30]/30"
+                                        />
+                                    )}
                                     <div className="flex items-center justify-between">
                                         <span className="rounded-full bg-[#6F1D1B]/5 border border-[#6F1D1B]/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[#6F1D1B]">
                                             {ev.category}

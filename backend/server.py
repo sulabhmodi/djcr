@@ -1,10 +1,12 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, UploadFile, File, Form, Response, HTTPException
+from fastapi import Query
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import re
 import ipaddress
+import asyncio
 import logging
 from pathlib import Path
 from pydantic import BaseModel, EmailStr
@@ -15,6 +17,7 @@ from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 import httpx
+import requests
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -33,6 +36,55 @@ EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Digambar Jain Center of Raleigh")
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@djcraleigh.org")
+
+# --- Object storage (Emergent managed) ---
+STORAGE_BASE = (os.environ.get("INTEGRATION_PROXY_URL") or "").strip() or "https://integrations.emergentagent.com"
+STORAGE_URL = STORAGE_BASE.rstrip("/") + "/objstore/api/v1/storage"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
+APP_NAME = "djcr"
+storage_key = None
+
+IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+MAX_UPLOAD_BYTES = 15 * 1024 * 1024
+
+
+def init_storage(force: bool = False):
+    global storage_key
+    if storage_key and not force:
+        return storage_key
+    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
+    resp.raise_for_status()
+    storage_key = resp.json()["storage_key"]
+    return storage_key
+
+
+def put_object(path: str, data: bytes, content_type: str) -> dict:
+    key = init_storage()
+    resp = requests.put(
+        f"{STORAGE_URL}/objects/{path}",
+        headers={"X-Storage-Key": key, "Content-Type": content_type},
+        data=data, timeout=120,
+    )
+    if resp.status_code == 404:
+        key = init_storage(force=True)
+        resp = requests.put(
+            f"{STORAGE_URL}/objects/{path}",
+            headers={"X-Storage-Key": key, "Content-Type": content_type},
+            data=data, timeout=120,
+        )
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_object(path: str):
+    key = init_storage()
+    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    if resp.status_code == 404:
+        key = init_storage(force=True)
+        resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    resp.raise_for_status()
+    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
+
 
 EVENTS = [
     {
@@ -254,6 +306,20 @@ class InterestSignup(BaseModel):
     message: Optional[str] = ""
 
 
+def _public_file(doc: dict) -> dict:
+    return {
+        "id": doc["id"],
+        "title": doc.get("title") or doc.get("original_filename", ""),
+        "category": doc["category"],
+        "event_id": doc.get("event_id", ""),
+        "content_type": doc.get("content_type", ""),
+        "size": doc.get("size", 0),
+        "created_at": doc.get("created_at", ""),
+        "url": f"/api/media/file/{doc['id']}",
+    }
+
+
+# --- Routes ---
 @api_router.get("/")
 async def root():
     return {"message": "Digambar Jain Center of Raleigh — API"}
@@ -313,6 +379,95 @@ async def create_interest(signup: InterestSignup):
     return {"ok": True, "id": doc["id"]}
 
 
+# --- Media / file storage routes ---
+@api_router.post("/media/upload")
+async def upload_media(
+    file: UploadFile = File(...),
+    category: str = Form("gallery"),
+    title: str = Form(""),
+    event_id: str = Form(""),
+):
+    if category not in {"gallery", "event", "document"}:
+        raise HTTPException(status_code=400, detail="Invalid category")
+    if not EMERGENT_KEY:
+        raise HTTPException(status_code=503, detail="Storage is not configured")
+    data = await file.read()
+    if not data:
+        raise HTTPException(status_code=400, detail="Empty file")
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="File too large (max 15 MB)")
+    content_type = file.content_type or "application/octet-stream"
+    if category == "document":
+        if content_type != "application/pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files are allowed for documents")
+    elif content_type not in IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
+    if category == "event" and event_id and event_id not in {e["id"] for e in EVENTS}:
+        raise HTTPException(status_code=400, detail="Unknown event")
+    filename = file.filename or "file"
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ("pdf" if category == "document" else "jpg")
+    path = f"{APP_NAME}/media/{category}/{uuid.uuid4()}.{ext}"
+    try:
+        result = await asyncio.to_thread(put_object, path, data, content_type)
+    except Exception as e:
+        logger.error(f"Storage upload failed: {e}")
+        raise HTTPException(status_code=502, detail="Upload storage unavailable")
+    doc = {
+        "id": str(uuid.uuid4()),
+        "storage_path": result["path"],
+        "original_filename": filename,
+        "title": title.strip(),
+        "category": category,
+        "event_id": event_id if category == "event" else "",
+        "content_type": content_type,
+        "size": result.get("size", len(data)),
+        "is_deleted": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.media.insert_one(doc)
+    return {"ok": True, "file": _public_file(doc)}
+
+
+@api_router.get("/media")
+async def list_media(category: Optional[str] = None, event_id: Optional[str] = None):
+    q = {"is_deleted": False}
+    if category:
+        q["category"] = category
+    if event_id:
+        q["event_id"] = event_id
+    docs = await db.media.find(q, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return {"files": [_public_file(d) for d in docs]}
+
+
+@api_router.get("/media/file/{file_id}")
+async def serve_media(file_id: str, download: int = Query(0)):
+    record = await db.media.find_one({"id": file_id, "is_deleted": False}, {"_id": 0})
+    if not record:
+        raise HTTPException(status_code=404, detail="File not found")
+    try:
+        data, ct = await asyncio.to_thread(get_object, record["storage_path"])
+    except Exception as e:
+        logger.error(f"Storage download failed: {e}")
+        raise HTTPException(status_code=502, detail="File storage unavailable")
+    headers = {}
+    if download:
+        safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", record.get("original_filename", "file"))
+        headers["Content-Disposition"] = f'attachment; filename="{safe_name}"'
+    return Response(
+        content=data,
+        media_type=record.get("content_type") or ct,
+        headers=headers,
+    )
+
+
+@api_router.delete("/media/{file_id}")
+async def delete_media(file_id: str):
+    result = await db.media.update_one({"id": file_id}, {"$set": {"is_deleted": True}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="File not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -327,6 +482,18 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+
+
+@app.on_event("startup")
+async def startup():
+    try:
+        if EMERGENT_KEY:
+            await asyncio.to_thread(init_storage)
+            logger.info("Object storage initialized")
+        else:
+            logger.warning("EMERGENT_LLM_KEY not set — object storage disabled")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
 
 
 @app.on_event("shutdown")

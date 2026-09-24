@@ -87,7 +87,7 @@ export default function GetInvolved() {
         >
             <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto">
                 <SectionHeading
-                    chapter="06"
+                    chapter="07"
                     eyebrow="Seva & Community"
                     title="Be Part of Our Journey"
                     subtitle="Building a permanent spiritual home requires the participation of the entire Sangh. However you can contribute — presence, seva, or support — you are welcome."

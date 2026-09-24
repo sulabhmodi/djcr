@@ -52,7 +52,7 @@ export default function Contact() {
         <section id="contact" data-testid="contact-section" className="py-20 md:py-32 jali-bg">
             <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto">
                 <SectionHeading
-                    chapter="08"
+                    chapter="09"
                     eyebrow="Contact"
                     title="Connect With DJCR"
                     subtitle="Serving the Digambar Jain community of Raleigh, Cary, Morrisville, Durham, Chapel Hill, and the greater Research Triangle of North Carolina."

@@ -15,7 +15,7 @@ export default function Donate() {
             <div className="relative px-4 sm:px-8 lg:px-16 max-w-3xl mx-auto text-center">
                 <Reveal>
                     <p className="text-xs uppercase tracking-[0.35em] font-mono text-[#C99A30]">
-                        07 — Support
+                        08 — Support
                     </p>
                 </Reveal>
                 <Reveal delay={0.1}>

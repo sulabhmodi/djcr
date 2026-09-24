@@ -47,6 +47,15 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - README.md fully rewritten for a non-technical admin: overview, prerequisites, real repo structure, local dev (yarn start), editing guide with file paths, images guide, yarn build → frontend/build/, GitHub workflow, Cloudflare Pages + Squarespace DNS deployment for djcraleigh.org, forms/email explanation
 - NOTE: Emergent preview still runs the FastAPI backend (endpoints intact); the static site does not depend on it
 
+## Updates (2026-09-24, round 3 — File & media storage)
+- Emergent object storage integrated (playbook-compliant): EMERGENT_LLM_KEY in backend/.env, storage_key init at startup, app-prefix "djcr/media/...", MongoDB index in `media` collection, soft-delete only
+- Backend endpoints: POST /api/media/upload (multipart; categories gallery/event/document; images ≤15MB jpg/png/webp/gif, documents PDF-only; event photos validated against known event ids), GET /api/media (?category&event_id), GET /api/media/file/{id} (?download=1 sets attachment header), DELETE /api/media/{id} (soft)
+- New "Gallery & Resources" section (chapter 06, id=gallery): Photos/Documents tabs, photo grid, PDF download rows, public "Share a Photo"/"Share a Document" upload dialog (no login, per user default). If backend unreachable (static hosting) the section shows a graceful coming-soon message and hides uploads
+- Event cards now display the latest uploaded event photo when one exists
+- Nav: GALLERY added after Events; "Support Vision" header CTA removed to fit 9 items (Donate in gold remains the primary CTA); footer link added; chapters renumbered 06 Gallery, 07 Get Involved, 08 Donate, 09 Contact
+- Verified via curl: upload/list/serve/download for all 3 categories (test files soft-deleted after); verified via Playwright: tabs, empty states, upload dialog with event picker, real UI upload appears in gallery
+- Resend email flow decision: user was asked (mailto-only vs server-side vs hybrid) — no answer given; mailto-only remains in effect. Backend Resend notifications still fire if the backend endpoints are called directly
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions

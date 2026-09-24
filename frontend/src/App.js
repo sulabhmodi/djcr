@@ -9,6 +9,7 @@ import Vision from "@/components/djcr/Vision";
 import Dharma from "@/components/djcr/Dharma";
 import Project from "@/components/djcr/Project";
 import Events from "@/components/djcr/Events";
+import Gallery from "@/components/djcr/Gallery";
 import GetInvolved from "@/components/djcr/GetInvolved";
 import Donate from "@/components/djcr/Donate";
 import Contact from "@/components/djcr/Contact";
@@ -53,6 +54,7 @@ function App() {
                 <Dharma />
                 <Project />
                 <Events />
+                <Gallery />
                 <GetInvolved />
                 <Donate />
                 <Contact />
