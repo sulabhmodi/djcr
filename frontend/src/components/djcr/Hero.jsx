@@ -109,12 +109,12 @@ export default function Hero() {
             <div className="relative z-10 px-4 sm:px-8 max-w-4xl mx-auto text-center pt-28 pb-20">
                 <motion.p
                     data-testid="hero-mantra"
-                    initial={{ opacity: 0, letterSpacing: "0.6em" }}
-                    animate={{ opacity: 1, letterSpacing: "0.28em" }}
+                    initial={{ opacity: 0, letterSpacing: "0.45em" }}
+                    animate={{ opacity: 1, letterSpacing: "0.14em" }}
                     transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                     className="font-devanagari text-[#C99A30] text-xl sm:text-2xl md:text-3xl"
                 >
-                    णमो अरिहंताणं
+                    अहिंसा परमो धर्मः
                 </motion.p>
 
                 <motion.div

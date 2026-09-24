@@ -28,7 +28,7 @@ export default function Footer() {
                                 Research Triangle of North Carolina.
                             </p>
                             <p className="mt-5 font-devanagari text-[#C99A30] text-lg">
-                                णमो अरिहंताणं
+                                अहिंसा परमो धर्मः
                             </p>
                         </div>
                         <div>

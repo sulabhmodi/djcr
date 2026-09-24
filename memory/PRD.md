@@ -33,6 +33,12 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - curl: GET /api/, GET /api/events (7 events), POST /api/contact, /api/events/register, /api/interest — all 200 ok
 - Playwright: hero reveal, CTA scroll, event registration dialog submit + toast, interest submit + toast, contact submit + toast, mobile hero/menu/events — all pass; console clean (only platform overlay noise)
 
+## Updates (2026-09-24)
+- Mantra changed from णमो अरिहंताणं to अहिंसा परमो धर्मः (hero, contact panel, footer)
+- Contact email channel now shows admin@djcraleigh.org (mailto link)
+- Temple project roadmap extended: Vision = Completed (gold check); Planning = In Progress ("All legal activities in progress"); Property = In Progress ("Property search in progress")
+- Managed Resend email notifications wired: contact/event/interest submissions email admin@djcraleigh.org (ADMIN_EMAIL in backend/.env; EMAIL_FROM_NAME="Digambar Jain Center of Raleigh"). Pipeline verified with delivered@resend.dev (202 + id). NOTE: proxy currently blocks admin@djcraleigh.org as undeliverable (mailbox/domain not live yet) — needs a real working inbox or the djcraleigh.org mailbox to be created; submissions are always saved to MongoDB regardless.
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions

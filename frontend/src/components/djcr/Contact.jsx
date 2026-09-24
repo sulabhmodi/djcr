@@ -8,7 +8,13 @@ import SectionHeading from "./SectionHeading";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const CHANNELS = [
-    { icon: Mail, label: "Email", value: "To be announced", id: "email" },
+    {
+        icon: Mail,
+        label: "Email",
+        value: "admin@djcraleigh.org",
+        href: "mailto:admin@djcraleigh.org",
+        id: "email",
+    },
     { icon: Phone, label: "Phone", value: "To be announced", id: "phone" },
     { icon: MessageCircle, label: "WhatsApp", value: "Community group — link coming soon", id: "whatsapp" },
     { icon: Facebook, label: "Facebook", value: "To be announced", id: "facebook" },
@@ -56,7 +62,7 @@ export default function Contact() {
                             <div className="absolute inset-0 jali-bg-light pointer-events-none" />
                             <div className="relative">
                                 <p className="font-devanagari text-[#C99A30] text-2xl">
-                                    णमो अरिहंताणं
+                                    अहिंसा परमो धर्मः
                                 </p>
                                 <p className="mt-5 text-[#FFF9ED]/75 text-sm leading-relaxed">
                                     We would love to hear from you — whether you are new to the
@@ -77,9 +83,19 @@ export default function Contact() {
                                                 <span className="block text-xs uppercase tracking-[0.2em] text-[#C99A30]">
                                                     {c.label}
                                                 </span>
-                                                <span className="block text-sm text-[#FFF9ED]/70 mt-0.5">
-                                                    {c.value}
-                                                </span>
+                                                {c.href ? (
+                                                    <a
+                                                        href={c.href}
+                                                        data-testid={`contact-channel-${c.id}-link`}
+                                                        className="block text-sm text-[#FFF9ED] mt-0.5 hover:text-[#C99A30] transition-colors duration-300 underline-offset-4 hover:underline"
+                                                    >
+                                                        {c.value}
+                                                    </a>
+                                                ) : (
+                                                    <span className="block text-sm text-[#FFF9ED]/70 mt-0.5">
+                                                        {c.value}
+                                                    </span>
+                                                )}
                                             </span>
                                         </li>
                                     ))}

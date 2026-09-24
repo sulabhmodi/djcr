@@ -1,16 +1,28 @@
+import { Check } from "lucide-react";
 import Reveal from "./Reveal";
 import ShikharArt from "./ShikharArt";
 
 const MILESTONES = [
-    "Vision",
-    "Planning",
-    "Property",
-    "Design",
-    "Fundraising",
-    "Construction",
-    "Pratishtha",
+    {
+        name: "Vision",
+        status: "completed",
+        note: "Vision defined and shared with the Sangh",
+    },
+    {
+        name: "Planning",
+        status: "in-progress",
+        note: "All legal activities in progress",
+    },
+    {
+        name: "Property",
+        status: "in-progress",
+        note: "Property search in progress",
+    },
+    { name: "Design", status: "upcoming", note: "Temple architecture & design" },
+    { name: "Fundraising", status: "upcoming", note: "Sangh-wide fundraising" },
+    { name: "Construction", status: "upcoming", note: "Temple construction" },
+    { name: "Pratishtha", status: "upcoming", note: "Pratishtha Mahotsav" },
 ];
-const CURRENT = 0;
 
 export default function Project() {
     return (
@@ -38,8 +50,9 @@ export default function Project() {
                         <Reveal delay={0.3}>
                             <p className="mt-5 text-base text-[#292929]/70 leading-relaxed">
                                 This is an upcoming temple project, unfolding step by step with the
-                                blessings of the Sangh — from vision and planning to the day of
-                                Pratishtha. Every milestone below will be updated as our journey
+                                blessings of the Sangh. Our vision is complete, planning and legal
+                                activities are underway, and the search for a suitable property has
+                                begun. Every milestone below will be updated as our journey
                                 progresses.
                             </p>
                         </Reveal>
@@ -78,39 +91,57 @@ export default function Project() {
 
                 <div id="project-timeline" data-testid="project-timeline" className="mt-20">
                     <Reveal>
-                        <div className="flex flex-wrap justify-center gap-x-0 gap-y-8">
+                        <div className="flex flex-wrap justify-center gap-x-0 gap-y-10">
                             {MILESTONES.map((m, i) => {
-                                const active = i === CURRENT;
+                                const done = m.status === "completed";
+                                const active = m.status === "in-progress";
                                 return (
-                                    <div key={m} className="flex items-center">
+                                    <div key={m.name} className="flex items-start">
                                         <div className="flex flex-col items-center w-28 sm:w-32">
                                             <div
-                                                data-testid={`milestone-${m.toLowerCase()}`}
+                                                data-testid={`milestone-${m.name.toLowerCase()}`}
                                                 className={`w-12 h-12 rounded-full flex items-center justify-center border font-mono text-sm transition-colors duration-500 ${
-                                                    active
-                                                        ? "bg-[#E87524] border-[#E87524] text-[#FFF9ED] shadow-[0_0_0_6px_rgba(232,117,36,0.15)]"
-                                                        : "bg-[#FFFDF7] border-[#6F1D1B]/20 text-[#6F1D1B]/60"
+                                                    done
+                                                        ? "bg-[#C99A30] border-[#C99A30] text-[#521413] shadow-[0_0_0_6px_rgba(201,154,48,0.15)]"
+                                                        : active
+                                                          ? "bg-[#E87524] border-[#E87524] text-[#FFF9ED] shadow-[0_0_0_6px_rgba(232,117,36,0.15)]"
+                                                          : "bg-[#FFFDF7] border-[#6F1D1B]/20 text-[#6F1D1B]/60"
                                                 }`}
                                             >
-                                                {String(i + 1).padStart(2, "0")}
+                                                {done ? (
+                                                    <Check size={18} strokeWidth={2.5} />
+                                                ) : (
+                                                    String(i + 1).padStart(2, "0")
+                                                )}
                                             </div>
                                             <p
                                                 className={`mt-3 text-xs uppercase tracking-[0.14em] text-center ${
-                                                    active ? "text-[#6F1D1B] font-semibold" : "text-[#292929]/55"
+                                                    done || active
+                                                        ? "text-[#6F1D1B] font-semibold"
+                                                        : "text-[#292929]/55"
                                                 }`}
                                             >
-                                                {m}
+                                                {m.name}
                                             </p>
                                             <p
                                                 className={`mt-1 text-[10px] uppercase tracking-[0.2em] ${
-                                                    active ? "text-[#E87524]" : "text-[#292929]/35"
+                                                    done
+                                                        ? "text-[#C99A30]"
+                                                        : active
+                                                          ? "text-[#E87524]"
+                                                          : "text-[#292929]/35"
                                                 }`}
                                             >
-                                                {active ? "Current Phase" : "Upcoming"}
+                                                {done ? "Completed" : active ? "In Progress" : "Upcoming"}
                                             </p>
+                                            {m.note && (
+                                                <p className="mt-1.5 text-[11px] text-center text-[#292929]/55 leading-snug px-1">
+                                                    {m.note}
+                                                </p>
+                                            )}
                                         </div>
                                         {i < MILESTONES.length - 1 && (
-                                            <span className="hidden sm:block h-px w-6 lg:w-10 bg-[#6F1D1B]/20 -mt-14" />
+                                            <span className="hidden sm:block h-px w-4 lg:w-6 bg-[#6F1D1B]/20 mt-6" />
                                         )}
                                     </div>
                                 );
