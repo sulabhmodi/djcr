@@ -1,31 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 640" font-family="Cormorant Garamond, Georgia, serif">
   <defs>
-    <g id="djcr-mark-s">
-      <circle cx="96" cy="96" r="90" fill="none" stroke="#C99A30" stroke-width="3"/>
-      <circle cx="96" cy="96" r="82" fill="none" stroke="#6F1D1B" stroke-width="1.5" opacity="0.45"/>
-      <circle cx="96" cy="29" r="4.8" fill="#E87524"/>
-      <path d="M96 35 L96 40" stroke="#C99A30" stroke-width="2.4"/>
-      <path d="M96 40 C91 55 84 73 77 92 C70 111 63.6 127 59.6 141 L132.4 141 C128.4 127 122 111 115 92 C108 73 101 55 96 40 Z" fill="#6F1D1B"/>
-      <path d="M87.2 60 Q96 64.8 104.8 60" fill="none" stroke="#C99A30" stroke-width="1.8"/>
-      <path d="M82.4 76 Q96 81.6 109.6 76" fill="none" stroke="#C99A30" stroke-width="1.8"/>
-      <path d="M77.4 92 Q96 98.4 114.6 92" fill="none" stroke="#C99A30" stroke-width="1.8"/>
-      <path d="M72 108 Q96 115.2 120 108" fill="none" stroke="#C99A30" stroke-width="1.8"/>
-      <path d="M66.4 124 Q96 132 125.6 124" fill="none" stroke="#C99A30" stroke-width="1.8"/>
-      <path d="M49 141 a8 8 0 0 1 16 0 Z" fill="#6F1D1B"/>
-      <path d="M127 141 a8 8 0 0 1 16 0 Z" fill="#6F1D1B"/>
-      <rect x="50" y="141" width="92" height="6" rx="2" fill="#6F1D1B"/>
-      <rect x="43" y="149" width="106" height="5.2" rx="2" fill="#6F1D1B"/>
-      <g transform="translate(34 158) rotate(-38)">
-        <path d="M0 0 C 5.2 -6, 12.8 -6.8, 18.8 -2.2 C 13.6 3.2, 5.2 3.6, 0 0 Z" fill="#C99A30"/>
-        <path d="M1.4 -0.8 L16.8 -2" stroke="#6F1D1B" stroke-width="1.1"/>
+    <path id="s-petal-s" d="M300 288 C 287 234 289 176 300 128 C 311 176 313 234 300 288 Z"/>
+    <g id="djcr-seal-s">
+      <circle cx="300" cy="300" r="285" fill="#FFF9ED" stroke="#C99A30" stroke-width="12"/>
+      <circle cx="300" cy="300" r="262" fill="none" stroke="#6F1D1B" stroke-width="5" opacity="0.5"/>
+      <g fill="#E87524" opacity="0.9">
+        <use href="#s-petal-s" transform="rotate(15 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(45 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(75 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(105 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(135 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(165 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(195 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(225 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(255 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(285 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(315 300 300)"/>
+        <use href="#s-petal-s" transform="rotate(345 300 300)"/>
       </g>
-      <g transform="translate(158 158) scale(-1 1) rotate(-38)">
-        <path d="M0 0 C 5.2 -6, 12.8 -6.8, 18.8 -2.2 C 13.6 3.2, 5.2 3.6, 0 0 Z" fill="#C99A30"/>
-        <path d="M1.4 -0.8 L16.8 -2" stroke="#6F1D1B" stroke-width="1.1"/>
+      <circle cx="300" cy="300" r="130" fill="#FFF9ED" opacity="0.82"/>
+      <g stroke="#6F1D1B" stroke-width="24" stroke-linecap="round" fill="none">
+        <path d="M 232 352 C 232 402 300 408 312 366 C 321 334 303 318 278 320"/>
+        <path d="M 224 296 L 352 296"/>
+        <path d="M 320 296 C 320 262 318 240 324 216 C 329 196 344 188 356 196 C 366 203 364 218 352 222"/>
       </g>
+      <circle cx="352" cy="162" r="13" fill="#E87524"/>
     </g>
   </defs>
-  <use href="#djcr-mark-s" transform="translate(192 30) scale(1.125)"/>
+  <use href="#djcr-seal-s" transform="translate(180 20) scale(0.4)"/>
   <text x="300" y="330" text-anchor="middle" font-size="52" font-weight="600" fill="#6F1D1B">Digambar Jain Center</text>
   <text x="300" y="392" text-anchor="middle" font-size="52" font-style="italic" font-weight="500" fill="#6F1D1B">of Raleigh</text>
   <rect x="264" y="418" width="72" height="2.5" fill="#C99A30"/>

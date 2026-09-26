@@ -72,6 +72,12 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - All use the original DJCR mark (Shikhar spire, gold tier arcs, saffron kalasha, oak leaves) with "Digambar Jain Center of Raleigh" in Cormorant Garamond + "RALEIGH • RESEARCH TRIANGLE, NC" caption
 - Header/footer lockup continues to use Logo.jsx; README documents all logo files
 
+## Updates (2026-09-26, round 6 — Circular Jain seal logo, per user reference of JSOWR logo)
+- New official emblem: circular seal with Jain Prateek-inspired center glyph (stylized, original artwork), 12 saffron lotus petals + gold outer petals, gold ring with 8 diamond ornaments, circular text "DIGAMBAR JAIN CENTER OF RALEIGH" (top), "SAMYAK DARSHAN ✦ SAMYAK GYAN ✦ SAMYAK CHARITRA" (middle ring), "DJCR ✦ NORTH CAROLINA" (bottom) — DJCR palette, not a copy of the reference
+- Files: public/logo-seal.svg/.png (1200px), logo.svg favicon replaced with seal, Logo.jsx header/footer mark replaced with simplified seal, logo-full / logo-full-dark / logo-stacked SVG+PNG regenerated with the seal
+- Sacred-swastika separators from the reference were deliberately replaced with ✦ diamonds; can add traditional Jain symbols on request
+- Verified: all variants rendered at high res and visually inspected; seal live in site header
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions
