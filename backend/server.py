@@ -1,5 +1,4 @@
-from fastapi import FastAPI, APIRouter, UploadFile, File, Form, Response, HTTPException
-from fastapi import Query
+from fastapi import FastAPI, APIRouter, UploadFile, File, Form, Response, HTTPException, Query, Header, Depends, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -12,12 +11,14 @@ from pathlib import Path
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 import httpx
 import requests
+import bcrypt
+import jwt
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -45,48 +46,53 @@ APP_NAME = "djcr"
 storage_key = None
 
 IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
-MAX_UPLOAD_BYTES = 15 * 1024 * 1024
+VIDEO_TYPES = {"video/mp4", "video/webm", "video/quicktime"}
+MAX_UPLOAD_BYTES = 60 * 1024 * 1024
+
+# --- Auth ---
+JWT_ALGORITHM = "HS256"
 
 
-def init_storage(force: bool = False):
-    global storage_key
-    if storage_key and not force:
-        return storage_key
-    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
-    resp.raise_for_status()
-    storage_key = resp.json()["storage_key"]
-    return storage_key
+def get_jwt_secret() -> str:
+    return os.environ["JWT_SECRET"]
 
 
-def put_object(path: str, data: bytes, content_type: str) -> dict:
-    key = init_storage()
-    resp = requests.put(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key, "Content-Type": content_type},
-        data=data, timeout=120,
-    )
-    if resp.status_code == 404:
-        key = init_storage(force=True)
-        resp = requests.put(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key, "Content-Type": content_type},
-            data=data, timeout=120,
-        )
-    resp.raise_for_status()
-    return resp.json()
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
-def get_object(path: str):
-    key = init_storage()
-    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
-    if resp.status_code == 404:
-        key = init_storage(force=True)
-        resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
-    resp.raise_for_status()
-    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
+def verify_password(plain: str, hashed: str) -> bool:
+    return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
 
 
-EVENTS = [
+def create_access_token(user_id: str, email: str) -> str:
+    payload = {
+        "sub": user_id,
+        "email": email,
+        "exp": datetime.now(timezone.utc) + timedelta(hours=12),
+        "type": "access",
+    }
+    return jwt.encode(payload, get_jwt_secret(), algorithm=JWT_ALGORITHM)
+
+
+async def get_current_admin(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(authorization[7:], get_jwt_secret(), algorithms=[JWT_ALGORITHM])
+        if payload.get("type") != "access":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    user = await db.users.find_one({"id": payload["sub"], "role": "admin"}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
+
+
+DEFAULT_EVENTS = [
     {
         "id": "dash-lakshan-parv",
         "title": "Dash Lakshan Parv",
@@ -158,6 +164,44 @@ EVENTS = [
         "tentative": True,
     },
 ]
+
+
+def init_storage(force: bool = False):
+    global storage_key
+    if storage_key and not force:
+        return storage_key
+    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
+    resp.raise_for_status()
+    storage_key = resp.json()["storage_key"]
+    return storage_key
+
+
+def put_object(path: str, data: bytes, content_type: str) -> dict:
+    key = init_storage()
+    resp = requests.put(
+        f"{STORAGE_URL}/objects/{path}",
+        headers={"X-Storage-Key": key, "Content-Type": content_type},
+        data=data, timeout=120,
+    )
+    if resp.status_code == 404:
+        key = init_storage(force=True)
+        resp = requests.put(
+            f"{STORAGE_URL}/objects/{path}",
+            headers={"X-Storage-Key": key, "Content-Type": content_type},
+            data=data, timeout=120,
+        )
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_object(path: str):
+    key = init_storage()
+    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    if resp.status_code == 404:
+        key = init_storage(force=True)
+        resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    resp.raise_for_status()
+    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 
 # --- Email guardrail gate (managed Resend playbook) ---
@@ -306,6 +350,24 @@ class InterestSignup(BaseModel):
     message: Optional[str] = ""
 
 
+class AdminLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class EventIn(BaseModel):
+    title: str
+    category: str = "Community"
+    date: str
+    time: str = "To be announced"
+    location: str = "Raleigh–RTP Area • Venue to be announced"
+    description: str = ""
+    tentative: bool = True
+    youtube_url: str = ""
+    media_id: str = ""
+    media_type: str = ""
+
+
 def _public_file(doc: dict) -> dict:
     return {
         "id": doc["id"],
@@ -319,7 +381,11 @@ def _public_file(doc: dict) -> dict:
     }
 
 
-# --- Routes ---
+def _public_event(doc: dict) -> dict:
+    return {k: v for k, v in doc.items() if k not in {"_id", "is_deleted"}}
+
+
+# --- Public routes ---
 @api_router.get("/")
 async def root():
     return {"message": "Digambar Jain Center of Raleigh — API"}
@@ -327,7 +393,8 @@ async def root():
 
 @api_router.get("/events")
 async def list_events():
-    return {"events": EVENTS}
+    docs = await db.events.find({"is_deleted": False}, {"_id": 0}).sort("order", 1).to_list(200)
+    return {"events": [_public_event(d) for d in docs]}
 
 
 @api_router.post("/contact")
@@ -395,17 +462,26 @@ async def upload_media(
     if not data:
         raise HTTPException(status_code=400, detail="Empty file")
     if len(data) > MAX_UPLOAD_BYTES:
-        raise HTTPException(status_code=413, detail="File too large (max 15 MB)")
+        raise HTTPException(status_code=413, detail="File too large (max 60 MB)")
     content_type = file.content_type or "application/octet-stream"
     if category == "document":
         if content_type != "application/pdf":
             raise HTTPException(status_code=400, detail="Only PDF files are allowed for documents")
-    elif content_type not in IMAGE_TYPES:
-        raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
-    if category == "event" and event_id and event_id not in {e["id"] for e in EVENTS}:
-        raise HTTPException(status_code=400, detail="Unknown event")
+    elif content_type in IMAGE_TYPES:
+        pass
+    elif content_type in VIDEO_TYPES and category in {"event", "gallery"}:
+        pass
+    else:
+        raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images, or MP4/WEBM videos are allowed")
+    if category == "event" and event_id:
+        known = await db.events.find_one({"id": event_id}, {"_id": 0, "id": 1})
+        if not known and event_id not in {e["id"] for e in DEFAULT_EVENTS}:
+            raise HTTPException(status_code=400, detail="Unknown event")
     filename = file.filename or "file"
-    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ("pdf" if category == "document" else "jpg")
+    if "." in filename:
+        ext = filename.rsplit(".", 1)[-1].lower()
+    else:
+        ext = "pdf" if category == "document" else ("mp4" if content_type in VIDEO_TYPES else "jpg")
     path = f"{APP_NAME}/media/{category}/{uuid.uuid4()}.{ext}"
     try:
         result = await asyncio.to_thread(put_object, path, data, content_type)
@@ -468,6 +544,62 @@ async def delete_media(file_id: str):
     return {"ok": True}
 
 
+# --- Admin auth + event management ---
+@api_router.post("/admin/login")
+async def admin_login(body: AdminLogin, request: Request):
+    email = body.email.lower()
+    identifier = f"{request.client.host if request.client else 'unknown'}:{email}"
+    since = datetime.now(timezone.utc) - timedelta(minutes=15)
+    attempts = await db.login_attempts.count_documents({"identifier": identifier, "at": {"$gte": since.isoformat()}})
+    if attempts >= 5:
+        raise HTTPException(status_code=429, detail="Too many failed attempts. Try again in 15 minutes.")
+    user = await db.users.find_one({"email": email, "role": "admin"})
+    if not user or not verify_password(body.password, user["password_hash"]):
+        await db.login_attempts.insert_one({"identifier": identifier, "at": datetime.now(timezone.utc).isoformat()})
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    await db.login_attempts.delete_many({"identifier": identifier})
+    return {"token": create_access_token(user["id"], email), "email": email}
+
+
+@api_router.get("/admin/events")
+async def admin_list_events(admin=Depends(get_current_admin)):
+    docs = await db.events.find({"is_deleted": False}, {"_id": 0}).sort("order", 1).to_list(500)
+    return {"events": [_public_event(d) for d in docs]}
+
+
+@api_router.post("/admin/events")
+async def admin_create_event(ev: EventIn, admin=Depends(get_current_admin)):
+    last = await db.events.find({}, {"_id": 0, "order": 1}).sort("order", -1).limit(1).to_list(1)
+    doc = ev.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["order"] = (last[0]["order"] + 1) if last else 0
+    doc["is_deleted"] = False
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    doc["updated_at"] = doc["created_at"]
+    await db.events.insert_one(doc)
+    return {"ok": True, "event": _public_event(doc)}
+
+
+@api_router.put("/admin/events/{event_id}")
+async def admin_update_event(event_id: str, ev: EventIn, admin=Depends(get_current_admin)):
+    result = await db.events.update_one(
+        {"id": event_id, "is_deleted": False},
+        {"$set": {**ev.model_dump(), "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Event not found")
+    doc = await db.events.find_one({"id": event_id}, {"_id": 0})
+    return {"ok": True, "event": _public_event(doc)}
+
+
+@api_router.delete("/admin/events/{event_id}")
+async def admin_delete_event(event_id: str, admin=Depends(get_current_admin)):
+    result = await db.events.update_one({"id": event_id}, {"$set": {"is_deleted": True}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -486,6 +618,34 @@ logging.basicConfig(
 
 @app.on_event("startup")
 async def startup():
+    await db.users.create_index("email", unique=True)
+    await db.login_attempts.create_index("identifier")
+    admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
+    existing = await db.users.find_one({"email": ADMIN_EMAIL.lower()})
+    if existing is None:
+        await db.users.insert_one({
+            "id": str(uuid.uuid4()),
+            "email": ADMIN_EMAIL.lower(),
+            "password_hash": hash_password(admin_password),
+            "name": "DJCR Admin",
+            "role": "admin",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+        logger.info("Admin user seeded")
+    elif not verify_password(admin_password, existing["password_hash"]):
+        await db.users.update_one(
+            {"email": ADMIN_EMAIL.lower()},
+            {"$set": {"password_hash": hash_password(admin_password)}},
+        )
+        logger.info("Admin password reconciled with env")
+    if await db.events.count_documents({}) == 0:
+        now = datetime.now(timezone.utc).isoformat()
+        for i, e in enumerate(DEFAULT_EVENTS):
+            await db.events.insert_one({
+                **e, "youtube_url": "", "media_id": "", "media_type": "",
+                "order": i, "is_deleted": False, "created_at": now, "updated_at": now,
+            })
+        logger.info("Default events seeded")
     try:
         if EMERGENT_KEY:
             await asyncio.to_thread(init_storage)

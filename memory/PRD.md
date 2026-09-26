@@ -56,6 +56,17 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - Verified via curl: upload/list/serve/download for all 3 categories (test files soft-deleted after); verified via Playwright: tabs, empty states, upload dialog with event picker, real UI upload appears in gallery
 - Resend email flow decision: user was asked (mailto-only vs server-side vs hybrid) — no answer given; mailto-only remains in effect. Backend Resend notifications still fire if the backend endpoints are called directly
 
+## Updates (2026-09-26, round 4 — Admin panel, YouTube live, topbar, vibrancy)
+- JWT admin auth (integration playbook): POST /api/admin/login (Bearer token, 12h), bcrypt hash, admin seeded from ADMIN_EMAIL + ADMIN_PASSWORD env (reconciles on restart; no in-app password change), 5-attempts/15-min lockout via login_attempts, users.email unique index
+- Admin page at /admin (React route): login card + event manager — create/edit/delete daily events with write-up, photo OR video upload (MP4/WEBM up to 60MB via object storage), and YouTube live link; lists all live events with edit/delete
+- Events are now DB-backed: db.events seeded once from defaults on first startup (never re-seeds when data exists); public GET /api/events reads DB; eventsData.js remains the static-hosting fallback
+- Public event cards: saffron "Watch Live on YouTube" button when youtube_url set; photo/video rendered when media attached; colored category chips (Parv/Puja saffron, Swadhyay/Community gold, Live Stream solid maroon)
+- Top bar above header: admin@djcraleigh.org (mailto) + +1 (984) 800-2733 (tel:+19848002733), gold gradient divider strip; phone also added to Contact channels; anchor scroll offset updated to -116, hero pt-44
+- Logo lockup now shows full name "Digambar Jain Center of Raleigh" in display serif with small gold DJCR above (mark unchanged: Shikhar + oak leaves)
+- Vibrancy pass (tasteful): warmer hero glow (saffron), maroon gradient marquee, saffron icon circles on vision pillars, saffron hover wash on event cards
+- Admin credentials: admin@djcraleigh.org / DJCRJaiJinendra@2026 (in /app/memory/test_credentials.md); /app/auth_testing.md saved
+- Verified: curl login→list→create→update→public-read→delete chain, 401 without token, 401 wrong password; Playwright UI login + create event with photo + YouTube link visible on public site (test event + media cleaned up)
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions

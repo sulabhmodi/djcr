@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "@/App.css";
 import Header from "@/components/djcr/Header";
 import Hero from "@/components/djcr/Hero";
@@ -14,9 +15,10 @@ import GetInvolved from "@/components/djcr/GetInvolved";
 import Donate from "@/components/djcr/Donate";
 import Contact from "@/components/djcr/Contact";
 import Footer from "@/components/djcr/Footer";
+import Admin from "@/components/djcr/Admin";
 import { Toaster } from "@/components/ui/sonner";
 
-function App() {
+function Landing() {
     useEffect(() => {
         const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
         let rafId;
@@ -32,7 +34,7 @@ function App() {
             const id = anchor.getAttribute("href");
             if (id.length > 1 && document.querySelector(id)) {
                 e.preventDefault();
-                lenis.scrollTo(id, { offset: -72, duration: 1.4 });
+                lenis.scrollTo(id, { offset: -116, duration: 1.4 });
             }
         };
         document.addEventListener("click", onClick);
@@ -60,6 +62,13 @@ function App() {
                 <Contact />
             </main>
             <Footer />
+        </div>
+    );
+}
+
+function App() {
+    return (
+        <BrowserRouter>
             <Toaster
                 position="bottom-right"
                 toastOptions={{
@@ -70,7 +79,11 @@ function App() {
                     },
                 }}
             />
-        </div>
+            <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/admin" element={<Admin />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

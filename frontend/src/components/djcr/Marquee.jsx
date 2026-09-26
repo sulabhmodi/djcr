@@ -13,7 +13,7 @@ export default function Marquee() {
     return (
         <div
             data-testid="editorial-marquee"
-            className="relative overflow-hidden bg-[#6F1D1B] border-y border-[#C99A30]/30 py-4"
+            className="relative overflow-hidden bg-gradient-to-r from-[#521413] via-[#6F1D1B] to-[#521413] border-y border-[#C99A30]/30 py-4"
             aria-hidden="true"
         >
             <div className="animate-marquee flex w-max whitespace-nowrap">

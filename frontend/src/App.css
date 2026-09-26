@@ -5,9 +5,9 @@
 
 .hero-glow {
     background: radial-gradient(
-        ellipse 60% 45% at 50% 42%,
-        rgba(201, 154, 48, 0.14),
-        rgba(232, 117, 36, 0.05) 55%,
+        ellipse 62% 48% at 50% 42%,
+        rgba(201, 154, 48, 0.18),
+        rgba(232, 117, 36, 0.1) 55%,
         transparent 75%
     );
 }

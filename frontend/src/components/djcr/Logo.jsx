@@ -37,23 +37,17 @@ const LogoMark = ({ size = 44 }) => (
 export default function Logo({ dark = false }) {
     return (
         <a
-            href="#temple"
+            href="/#temple"
             data-testid="logo-link"
             className="flex items-center gap-3 group"
             aria-label="Digambar Jain Center of Raleigh"
         >
             <LogoMark />
-            <span className="flex flex-col leading-none">
+            <span className="flex flex-col leading-tight">
+                <span className="text-[9px] uppercase tracking-[0.34em] text-[#C99A30]">DJCR</span>
                 <span
-                    className={`font-display text-xl font-semibold tracking-wide ${
+                    className={`font-display text-[15px] sm:text-lg font-semibold ${
                         dark ? "text-[#FFF9ED]" : "text-[#6F1D1B]"
-                    }`}
-                >
-                    DJCR
-                </span>
-                <span
-                    className={`text-[10px] uppercase tracking-[0.18em] mt-1 ${
-                        dark ? "text-[#C99A30]" : "text-[#292929]/60"
                     }`}
                 >
                     Digambar Jain Center of Raleigh

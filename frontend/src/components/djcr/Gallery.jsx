@@ -39,7 +39,7 @@ export default function Gallery() {
             .finally(() => setLoading(false));
     }, []);
 
-    const photos = files.filter((f) => f.category !== "document");
+    const photos = files.filter((f) => f.category === "gallery");
     const docs = files.filter((f) => f.category === "document");
 
     const openUpload = (category) => {

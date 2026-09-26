@@ -106,7 +106,7 @@ export default function Hero() {
                 <ShikharArt className="w-[130vw] sm:w-[95vw] max-w-[880px] text-[#C99A30] opacity-[0.16]" />
             </motion.div>
 
-            <div className="relative z-10 px-4 sm:px-8 max-w-4xl mx-auto text-center pt-28 pb-20">
+            <div className="relative z-10 px-4 sm:px-8 max-w-4xl mx-auto text-center pt-44 pb-24">
                 <motion.p
                     data-testid="hero-mantra"
                     initial={{ opacity: 0, letterSpacing: "0.45em" }}

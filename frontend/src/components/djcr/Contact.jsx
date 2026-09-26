@@ -14,7 +14,7 @@ const CHANNELS = [
         href: `mailto:${ADMIN_EMAIL}`,
         id: "email",
     },
-    { icon: Phone, label: "Phone", value: "To be announced", id: "phone" },
+    { icon: Phone, label: "Phone", value: "+1 (984) 800-2733", href: "tel:+19848002733", id: "phone" },
     { icon: MessageCircle, label: "WhatsApp", value: "Community group — link coming soon", id: "whatsapp" },
     { icon: Facebook, label: "Facebook", value: "To be announced", id: "facebook" },
     { icon: Instagram, label: "Instagram", value: "To be announced", id: "instagram" },

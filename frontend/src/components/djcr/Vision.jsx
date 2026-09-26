@@ -57,11 +57,13 @@ export default function Vision() {
                                 className="group h-full rounded-2xl border border-[#C99A30]/25 bg-[#FFF9ED]/[0.04] backdrop-blur-sm p-7 hover:border-[#C99A30]/60 hover:-translate-y-1.5 hover:bg-[#FFF9ED]/[0.07] transition-all duration-500"
                             >
                                 <div className="flex items-center justify-between">
-                                    <p.icon
-                                        className="text-[#C99A30] group-hover:text-[#E87524] transition-colors duration-500"
-                                        size={30}
-                                        strokeWidth={1.5}
-                                    />
+                                    <span className="w-12 h-12 rounded-full bg-[#E87524]/15 border border-[#C99A30]/30 flex items-center justify-center">
+                                        <p.icon
+                                            className="text-[#E87524] group-hover:text-[#C99A30] transition-colors duration-500"
+                                            size={24}
+                                            strokeWidth={1.5}
+                                        />
+                                    </span>
                                     <span className="font-mono text-xs tracking-[0.3em] text-[#C99A30]/70">
                                         {p.num}
                                     </span>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail, Phone } from "lucide-react";
 import Logo from "./Logo";
 
 const NAV = [
@@ -27,41 +27,64 @@ export default function Header() {
     }, []);
 
     return (
-        <header
-            data-testid="site-header"
-            className={`fixed top-0 inset-x-0 z-50 transition-[background-color,box-shadow,border-color] duration-500 border-b ${
-                scrolled
-                    ? "bg-[#FFF9ED]/85 backdrop-blur-md border-[#6F1D1B]/10 shadow-[0_8px_30px_rgba(111,29,27,0.06)]"
-                    : "bg-transparent border-transparent"
-            }`}
-        >
-            <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex items-center justify-between h-[72px]">
-                <Logo />
-                <nav className="hidden xl:flex items-center gap-5" aria-label="Main navigation">
-                    {NAV.map((item) => (
-                        <a
-                            key={item.id}
-                            href={item.href}
-                            data-testid={`nav-link-${item.id}`}
-                            className={`text-[13px] uppercase tracking-[0.12em] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full ${
-                                item.id === "donate"
-                                    ? "text-[#C99A30] font-semibold hover:text-[#E87524]"
-                                    : "text-[#292929]/70 hover:text-[#6F1D1B]"
-                            }`}
-                        >
-                            {item.label}
-                        </a>
-                    ))}
-                </nav>
-                <button
-                    data-testid="mobile-menu-button"
-                    className="xl:hidden text-[#6F1D1B] p-2"
-                    onClick={() => setOpen((v) => !v)}
-                    aria-label={open ? "Close menu" : "Open menu"}
-                >
-                    {open ? <X size={26} /> : <Menu size={26} />}
-                </button>
+        <div className="fixed top-0 inset-x-0 z-50">
+            <div className="bg-[#521413] border-b border-[#C99A30]/20">
+                <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto h-9 flex items-center justify-center sm:justify-between gap-6">
+                    <a
+                        href="mailto:admin@djcraleigh.org"
+                        data-testid="topbar-email"
+                        className="flex items-center gap-1.5 text-[11px] tracking-wide text-[#FFF9ED]/80 hover:text-[#C99A30] transition-colors duration-300"
+                    >
+                        <Mail size={12} className="text-[#C99A30]" />
+                        admin@djcraleigh.org
+                    </a>
+                    <a
+                        href="tel:+19848002733"
+                        data-testid="topbar-phone"
+                        className="hidden sm:flex items-center gap-1.5 text-[11px] tracking-wide text-[#FFF9ED]/80 hover:text-[#C99A30] transition-colors duration-300"
+                    >
+                        <Phone size={12} className="text-[#C99A30]" />
+                        +1 (984) 800-2733
+                    </a>
+                </div>
             </div>
+            <header
+                data-testid="site-header"
+                className={`transition-[background-color,box-shadow,border-color] duration-500 border-b ${
+                    scrolled
+                        ? "bg-[#FFF9ED]/85 backdrop-blur-md border-[#6F1D1B]/10 shadow-[0_8px_30px_rgba(111,29,27,0.06)]"
+                        : "bg-[#FFF9ED]/40 backdrop-blur-sm border-transparent"
+                }`}
+            >
+                <div className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex items-center justify-between h-[72px]">
+                    <Logo />
+                    <nav className="hidden xl:flex items-center gap-5" aria-label="Main navigation">
+                        {NAV.map((item) => (
+                            <a
+                                key={item.id}
+                                href={item.href}
+                                data-testid={`nav-link-${item.id}`}
+                                className={`text-[13px] uppercase tracking-[0.12em] transition-colors duration-300 relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C99A30] after:transition-[width] after:duration-300 hover:after:w-full ${
+                                    item.id === "donate"
+                                        ? "text-[#C99A30] font-semibold hover:text-[#E87524]"
+                                        : "text-[#292929]/70 hover:text-[#6F1D1B]"
+                                }`}
+                            >
+                                {item.label}
+                            </a>
+                        ))}
+                    </nav>
+                    <button
+                        data-testid="mobile-menu-button"
+                        className="xl:hidden text-[#6F1D1B] p-2"
+                        onClick={() => setOpen((v) => !v)}
+                        aria-label={open ? "Close menu" : "Open menu"}
+                    >
+                        {open ? <X size={26} /> : <Menu size={26} />}
+                    </button>
+                </div>
+            </header>
+            <div className="h-0.5 bg-gradient-to-r from-[#6F1D1B] via-[#E87524] to-[#C99A30]" />
             <AnimatePresence>
                 {open && (
                     <motion.nav
@@ -91,6 +114,6 @@ export default function Header() {
                     </motion.nav>
                 )}
             </AnimatePresence>
-        </header>
+        </div>
     );
 }
