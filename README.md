@@ -160,7 +160,7 @@ save, and the local site updates instantly.
 | **Contact email** | `frontend/src/components/djcr/Contact.jsx` (the `ADMIN_EMAIL` constant at the top) — it is currently `admin@djcraleigh.org` |
 | Footer text and links | `frontend/src/components/djcr/Footer.jsx` |
 | Browser tab title & Google search description (SEO) | `frontend/public/index.html` (the `<title>` tag and `<meta name="description">` tag) |
-| Logo | `frontend/src/components/djcr/Logo.jsx` and `frontend/public/logo.svg` |
+| Logo | `frontend/src/components/djcr/Logo.jsx` (header/footer lockup) and `frontend/public/logo.svg` (favicon mark). **Ready-made logo files with the full name are in `frontend/public/`**: `logo-full.svg` + `logo-full.png` (horizontal, ivory — letterhead, banners), `logo-full-dark.svg` + `logo-full-dark.png` (for maroon/dark backgrounds), `logo-stacked.svg` + `logo-stacked.png` (square-ish, with अहिंसा परमो धर्मः — social media profiles, signage). PNGs are 2160px/1800px wide, print-ready |
 | Brand colors & fonts | `frontend/src/index.css` (colors are defined at the top under `:root`) |
 
 > Tip: to find where any sentence on the site lives, use your editor's "Search in files"

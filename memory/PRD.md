@@ -67,6 +67,11 @@ Single-page site; nav Temple | About Us | Temple Vision | Events | Jain Dharma |
 - Admin credentials: admin@djcraleigh.org / DJCRJaiJinendra@2026 (in /app/memory/test_credentials.md); /app/auth_testing.md saved
 - Verified: curl login→list→create→update→public-read→delete chain, 401 without token, 401 wrong password; Playwright UI login + create event with photo + YouTube link visible on public site (test event + media cleaned up)
 
+## Updates (2026-09-26, round 5 — Brand logo assets with name)
+- Full logo lockups created in frontend/public/: logo-full.svg/.png (horizontal, ivory bg, 2160x600), logo-full-dark.svg/.png (for maroon backgrounds), logo-stacked.svg/.png (1800x1920, includes अहिंसा परमो धर्मः + DJCR — for social profiles/signage)
+- All use the original DJCR mark (Shikhar spire, gold tier arcs, saffron kalasha, oak leaves) with "Digambar Jain Center of Raleigh" in Cormorant Garamond + "RALEIGH • RESEARCH TRIANGLE, NC" caption
+- Header/footer lockup continues to use Logo.jsx; README documents all logo files
+
 ## Backlog / Next Tasks
 - P0: Admin or CMS flow to manage events (currently server-side placeholder list; user mentioned Squarespace — could migrate or keep custom)
 - P1: Real contact channels (email/phone/social links) once provided; Resend email notifications for form submissions
